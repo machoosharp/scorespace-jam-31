@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://6habhkd48yj6"]
+
+[ext_resource type="Texture2D" uid="uid://b2gatieksxtmv" path="res://icon.svg" id="1_cvj4u"]
+[ext_resource type="Script" path="res://Player/rolling_player.gd" id="1_he16a"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4h5xk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wytkw"]
+albedo_texture = ExtResource("1_cvj4u")
+
+[sub_resource type="SphereMesh" id="SphereMesh_2so1s"]
+material = SubResource("StandardMaterial3D_wytkw")
+
+[node name="RollingPlayer" type="RigidBody3D"]
+collision_layer = 2
+script = ExtResource("1_he16a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_4h5xk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("SphereMesh_2so1s")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -0.6, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.947969, 0.318364, 0, -0.318364, 0.947969, 0, 1.61262, 3.81621)
+current = true

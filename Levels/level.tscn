@@ -1,0 +1,101 @@
+[gd_scene load_steps=14 format=3 uid="uid://dj6nhngmq1dps"]
+
+[ext_resource type="Texture2D" uid="uid://q8dhmreig0bu" path="res://lava.png" id="1_7oenb"]
+[ext_resource type="Texture2D" uid="uid://b2gatieksxtmv" path="res://icon.svg" id="1_wn1re"]
+[ext_resource type="PackedScene" uid="uid://c6arvwdj4awuc" path="res://Player/player.tscn" id="2_s2ujl"]
+[ext_resource type="PackedScene" uid="uid://bslsevaykt1wf" path="res://Pieces/platform.tscn" id="4_t1h6g"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a5fex"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_y6s5c"]
+sky_material = SubResource("ProceduralSkyMaterial_a5fex")
+
+[sub_resource type="Environment" id="Environment_xgraq"]
+background_mode = 2
+sky = SubResource("Sky_y6s5c")
+tonemap_mode = 2
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dl3mt"]
+height = 0.1
+radius = 20.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xbk6s"]
+albedo_texture = ExtResource("1_wn1re")
+uv1_scale = Vector3(22.75, 22.75, 22.75)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lf4iw"]
+material = SubResource("StandardMaterial3D_xbk6s")
+top_radius = 20.0
+bottom_radius = 20.0
+height = 0.1
+radial_segments = 20
+rings = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a3u45"]
+albedo_texture = ExtResource("1_7oenb")
+albedo_texture_force_srgb = true
+metallic = 1.0
+normal_scale = 16.0
+uv1_scale = Vector3(2000, 2000, 2000)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_opbs5"]
+material = SubResource("StandardMaterial3D_a3u45")
+size = Vector2(2000, 2000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_41pup"]
+size = Vector3(2000, 0.1, 2000)
+
+[node name="Level" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_xgraq")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("CylinderShape3D_dl3mt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("CylinderMesh_lf4iw")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="Lava" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Lava"]
+mesh = SubResource("PlaneMesh_opbs5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lava"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000427246, 0)
+shape = SubResource("BoxShape3D_41pup")
+
+[node name="Area3D" type="Area3D" parent="Lava"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lava/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000427246, 0)
+shape = SubResource("BoxShape3D_41pup")
+
+[node name="Player" parent="." instance=ExtResource("2_s2ujl")]
+
+[node name="Node3D" parent="." instance=ExtResource("4_t1h6g")]
+transform = Transform3D(0.970029, -0.242989, 0, 0.242989, 0.970029, 0, 0, 0, 1, 6.92111, 1, -0.195126)
+
+[node name="Node3D2" parent="." instance=ExtResource("4_t1h6g")]
+transform = Transform3D(0.997792, 0.0664132, 0, -0.0664132, 0.997792, 0, 0, 0, 1, -2.03277, 0.126636, -0.240284)
+
+[node name="Node3D3" parent="." instance=ExtResource("4_t1h6g")]
+transform = Transform3D(0.98371, 0.179764, 0, -0.179764, 0.98371, 0, 0, 0, 1, -1.41785, 0.154563, -0.233246)
+
+[node name="Node3D4" parent="." instance=ExtResource("4_t1h6g")]
+transform = Transform3D(0.928213, 0.372048, 0, -0.372048, 0.928213, 0, 0, 0, 1, -1.52244, -4.76837e-07, -0.211849)
+
+[node name="Node3D5" parent="." instance=ExtResource("4_t1h6g")]
+transform = Transform3D(0.844019, 0.536313, 0, -0.536313, 0.844019, 0, 0, 0, 1, -2.09569, 0, -0.239103)
+
+[node name="Node3D6" parent="." instance=ExtResource("4_t1h6g")]
+transform = Transform3D(0.627528, 0.778594, 0, -0.778594, 0.627528, 0, 0, 0, 1, -2.92297, 0, -0.239234)
