@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="ScoreSpace Jam #31"
+config/name="ball jump test"
 run/main_scene="res://Levels/level.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"

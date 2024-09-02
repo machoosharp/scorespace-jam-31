@@ -1,6 +1,8 @@
 extends CharacterBody3D
 
 
+const TERMINAL_VELOCITY = 100
+
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 var mouse_sens = 0.05
@@ -31,17 +33,28 @@ func _input( event ):
 			camera_anglev += changev
 			camera.rotate_x( deg_to_rad( changev ) )
 
+func print_vect( v: Vector3 ):
+	var xx = snappedf(v.x,0.01)
+	if xx == 0:
+		xx = '0.00'
+	var yy = snappedf(v.y,0.01)
+	if yy == 0:
+		yy = '0.00'
+	var zz = snappedf(v.z,0.01)
+	if zz == 0:
+		zz = '0.00'
+	print("x: ", xx, " y: ", yy, " z: ", zz)
+
 func _physics_process(delta: float) -> void:
+	
+	var new_up = Vector3.UP.cross(get_floor_normal())
+	var new_down = Vector3.DOWN.cross(get_floor_normal())
 
-	# Add the gravity.
-	if not is_on_floor():
-		velocity.y -= gravity * delta
+	velocity.y = move_toward(velocity.y, -TERMINAL_VELOCITY, gravity * delta)
 
-	var grav_res = get_floor_normal() if is_on_floor() else Vector3.UP
-	#
-	#var p: Vector3 = ray.position
-	#print( get_floor_angle(), get_floor_normal() )
-	#velocity -= get_floor_normal() * (get_floor_angle()*10)
+	ray.global_rotation = new_up
+	
+	print_vect(ray.global_rotation)
 
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
@@ -53,23 +66,20 @@ func _physics_process(delta: float) -> void:
 
 	var direction := ( transform.basis * Vector3( input_dir.x, 0, input_dir.y ) ).normalized()
 
-	if not direction:
-		print(3)
-		velocity.x = move_toward(velocity.x, 0, 0.1)
-		velocity.z = move_toward(velocity.z, 0, 0.1)
+	var asdf = new_up.rotated(Vector3.UP, deg_to_rad(-90.0))
+
+	if direction:
+		velocity.x = move_toward(velocity.x, direction.x * SPEED, SPEED * delta)
+		velocity.z = move_toward(velocity.z, direction.z * SPEED, SPEED * delta)
 
 	else:
-		print(2)
-		velocity.y = -10
-		velocity.x += get_floor_normal().x + (direction.x * 0.1)
-		velocity.z += get_floor_normal().z + (direction.z * 0.1)
-
-
-	print('nor', Vector3i(get_floor_normal()))
-	print('vel', Vector3i(velocity))
+		velocity.x = move_toward(velocity.x, asdf.x * SPEED, SPEED * delta)
+		velocity.z = move_toward(velocity.z, asdf.z * SPEED, SPEED * delta)
 
 	var diff: Vector3 = ( global_position - ball.global_position )
 
 	ball.apply_central_impulse(diff * 3)
+
+	#print_vect(velocity)
 
 	move_and_slide()

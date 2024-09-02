@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://dtver5b8xj71n"]
+
+[ext_resource type="Texture2D" uid="uid://b2gatieksxtmv" path="res://icon.svg" id="1_3wlxx"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_tjfld"]
+height = 0.1
+radius = 5.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fpwd0"]
+albedo_texture = ExtResource("1_3wlxx")
+uv1_scale = Vector3(0.105, 0.105, 0.105)
+uv1_offset = Vector3(0.5, 0, 0.5)
+uv1_triplanar = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cupjm"]
+material = SubResource("StandardMaterial3D_fpwd0")
+top_radius = 5.0
+bottom_radius = 5.0
+height = 0.1
+radial_segments = 24
+rings = 0
+
+[node name="Floor5" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("CylinderShape3D_tjfld")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("CylinderMesh_cupjm")

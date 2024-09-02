@@ -68,6 +68,7 @@ shape = SubResource("SphereShape3D_n1p87")
 mesh = SubResource("SphereMesh_cy8n0")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RayCast3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
